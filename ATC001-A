@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int dy[4] = {-1, 0, 1, 0};
+const int dx[4] = {0, -1, 0, 1};
+vector<vector<char>> grids(502, vector<char>(502, 'o'));
+vector<vector<bool>> done(502, vector<bool>(502, false));
+bool reached = false;
+
+void takahashi(int y, int x) {
+  if (reached || done[y][x] || grids[y][x] == 'o') return;
+  done[y][x] = true;
+  
+  for (int i = 0; i < 4; i++) {
+    int ny = y + dy[i];
+    int nx = x + dx[i];
+    if (grids[ny][nx] == 'g') {
+      reached = true;
+      return;
+    } else if (grids[ny][nx] == '.' && !done[ny][nx]) {
+      takahashi(ny, nx);
+      if (reached) break;
+    }
+  }
+  
+  return;
+}
+
+int main() {
+  int h, w; cin >> h >> w;
+  int sy, sx;
+
+  for (int i = 1; i <= h; i++) {
+    for (int j = 1; j <= w; j++) {
+      cin >> grids[i][j];
+      if (grids[i][j] == 's') {
+        sy = i;
+        sx = j;
+      }
+    }
+  }
+  
+  takahashi(sy, sx);
+  
+  if (reached) cout << "Yes" << endl;
+  else cout << "No" << endl;
+}
